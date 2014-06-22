@@ -1,0 +1,336 @@
+package ${package};
+
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.Id;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import javax.persistence.PersistenceContext;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Generic injectable crud based on hibernate api
+ *
+ * @param <T> entity to crud
+ * @author rafael-pestano
+ */
+@Dependent
+public final class Crud<T extends Serializable> implements Serializable {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    private Session session;
+
+    private Class<T> persistentClass;
+
+    private MatchMode matchMode;
+
+    private Example example;
+
+    private Integer maxResult;
+
+    private Integer firstResult;
+
+    private List<String> excludeProperties;
+
+    private Projection projection;
+
+    private Criteria criteria;
+
+    @Inject
+    public void init(InjectionPoint ip) {
+        if (ip != null && ip.getType() != null) {
+            ParameterizedType type = (ParameterizedType) ip.getType();
+            Type[] typeArgs = type.getActualTypeArguments();
+            try {
+                persistentClass = (Class<T>) typeArgs[0];
+            } catch (ClassCastException e) {
+                // intentional, will receive classcast in BaseServiceImpl(CDI
+                // BUG)
+            }
+        } else {
+            throw new IllegalArgumentException(
+                    "Provide entity at injection point ex: @Inject Crud<Entity> crud");
+        }
+    }
+
+    // buider methods
+
+    public Crud<T> matchMode(MatchMode matchMode) {
+        this.matchMode = matchMode;
+        return this;
+    }
+
+    public Crud<T> example(T entity) {
+         if(entity != null){
+             this.example = Example.create(entity);
+          }
+        return this;
+    }
+
+    public Crud<T> maxResult(Integer maxResult) {
+        this.maxResult = maxResult;
+        return this;
+    }
+
+    public Crud<T> firstResult(Integer firstResult) {
+        this.firstResult = firstResult;
+        return this;
+    }
+
+    public Crud<T> criteria(Criteria criteria) {
+        this.criteria = criteria;
+        return this;
+    }
+
+    public Crud<T> criteria() {
+        this.criteria = getCriteria();
+        return this;
+    }
+
+    public Crud<T> projection(Projection projection) {
+        this.projection = projection;
+        return this;
+    }
+
+    public Crud<T> excludeProperties(List<String> properties) {
+        this.excludeProperties = properties;
+        return this;
+    }
+
+    public Crud<T> excludeProperty(String property) {
+        if (this.excludeProperties == null) {
+            excludeProperties = new ArrayList<String>();
+        }
+
+        if (!excludeProperties.contains(property)) {
+            excludeProperties.add(property);
+        }
+        return this;
+    }
+
+    // find methods
+
+    /**
+     * find entity
+     *
+     * @return
+     */
+    public T find() {
+        if (criteria == null) {
+            criteria = getSession().createCriteria(getPersistentClass());
+        }
+        if (example != null && excludeProperties != null
+                && !excludeProperties.isEmpty()) {
+            for (String exclude : excludeProperties) {
+                example.excludeProperty(exclude);
+            }
+        }
+        if (matchMode == null) {
+            matchMode = MatchMode.ANYWHERE;
+        }
+
+        if (projection != null) {
+            criteria.setProjection(projection);
+        }
+        if (example != null) {
+            criteria.add(example.enableLike(matchMode).ignoreCase());
+        }
+        T result = (T) criteria.uniqueResult();
+        resetCriteria();
+        return result;
+    }
+
+    // list methods
+
+    public List<T> list() {
+        if (criteria == null) {
+            criteria = getSession().createCriteria(getPersistentClass());
+        }
+        if (example != null && excludeProperties != null && !excludeProperties.isEmpty()) {
+            for (String exclude : excludeProperties) {
+                example.excludeProperty(exclude);
+            }
+        }
+        if (matchMode == null) {
+            matchMode = MatchMode.ANYWHERE;
+        }
+
+        if (firstResult != null) {
+            criteria.setFirstResult(firstResult);
+        }
+
+        if (maxResult != null) {
+            criteria.setMaxResults(maxResult);
+        }
+        if (projection != null) {
+            criteria.setProjection(projection);
+        }
+        if (example != null) {
+            criteria.add(example.enableLike(matchMode).ignoreCase());
+        }
+        List<T> result = criteria.list();
+        resetCriteria();
+        return result;
+    }
+
+    public List<T> listAll() {
+        return getCriteria().list();
+    }
+
+    // count methods
+
+    public int count() {
+        if (criteria == null) {
+            criteria = getSession().createCriteria(getPersistentClass());
+        }
+        if (excludeProperties != null && !excludeProperties.isEmpty()) {
+            for (String exclude : excludeProperties) {
+                example.excludeProperty(exclude);
+            }
+        }
+        if (matchMode == null) {
+            matchMode = MatchMode.ANYWHERE;
+        }
+
+        if (projection != null) {
+            criteria.setProjection(projection);
+        }
+        if (example != null) {
+            criteria.add(example.enableLike(matchMode).ignoreCase());
+        }
+        criteria.setProjection(Projections.count(getSession()
+                .getSessionFactory().getClassMetadata(persistentClass)
+                .getIdentifierPropertyName()));
+        Long result = (Long) criteria.uniqueResult();
+        resetCriteria();
+        return result.intValue();
+    }
+
+    public int countAll() {
+        return projection(Projections.rowCount()).criteria(
+                getCriteria().setFirstResult(0).setMaxResults(1)).count();
+    }
+
+    // hibernate session shortcuts
+
+    public T load(Serializable id) {
+        return (T) this.getSession().load(persistentClass, id);
+    }
+
+    public T get(Serializable id) {
+        return (T) this.getSession().get(persistentClass, id);
+    }
+
+    public void save(T entity) {
+        this.getSession().save(entity);
+    }
+
+    public T merge(T entity) {
+        return (T) getSession().merge(entity);
+    }
+
+    public void update(T entity) {
+        this.getSession().update(entity);
+    }
+
+    public void delete(T entity) {
+        this.getSession().delete(this.get((Serializable) getPK(entity)));
+    }
+
+    public T refresh(T entity) {
+        this.getSession().refresh(entity);
+        return entity;
+    }
+
+    public void saveOrUpdate(T entity) {
+        this.getSession().saveOrUpdate(entity);
+    }
+
+    private void resetCriteria() {
+        criteria = null;
+        matchMode = null;
+        maxResult = null;
+        example = null;
+        firstResult = null;
+        projection = null;
+    }
+
+    // Getters & Setters
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    public Session getSession() {
+        if (session == null || !session.isOpen()) {
+            session = getEntityManager().unwrap(Session.class);
+        }
+        return session;
+    }
+
+    public Class<T> getPersistentClass() {
+        return persistentClass;
+    }
+
+    public void setPersistentClass(Class<T> persistentClass) {
+        this.persistentClass = persistentClass;
+    }
+
+    public Criteria getCriteria() {
+        if (criteria == null) {
+            criteria = getSession().createCriteria(getPersistentClass());
+        }
+        return criteria;
+    }
+
+    private <PK extends Serializable> PK getPK(T entity) {
+
+        Field idField = getIdField(entity.getClass());
+        if (idField == null) {
+            throw new RuntimeException("Could not find PK of entity:" + entity.getClass().getName());
+        }
+        try {
+            return (PK) idField.get(entity);
+        } catch (IllegalAccessException e) {
+            Logger.getLogger(Crud.class.getName()).log(Level.SEVERE, "Could not find PK of entity:" + entity.getClass().getSimpleName(), e);
+        }
+        //if it gets here no PK was found
+        throw new RuntimeException("Could not find PK of entity:" + entity.getClass().getName());
+    }
+
+
+    private Field getIdField(Class clazz) {
+        for (Field f : clazz.getDeclaredFields()) {
+            if (f.isAnnotationPresent(Id.class)) {
+                f.setAccessible(true);
+                return f;
+            }
+        }
+        Class superClass = clazz.getSuperclass();
+        if (superClass == null) {
+            return null;
+        } else {
+            return getIdField(superClass);
+        }
+    }
+}

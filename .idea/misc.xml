@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0" />
+  </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$USER_HOME$/arquillian-experience/conventions-archtype" />
+    <file type="web" url="file://$PROJECT_DIR$/../person-manager" />
+    <file type="web" url="file://$PROJECT_DIR$/../test" />
+  </component>
+  <component name="IdProvider" IDEtalkID="E857D814CF247792363A2BE26C8C2520" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/../person-manager/pom.xml" />
+        <option value="$USER_HOME$/git/forge-core/javaee-impl/pom.xml" />
+        <option value="$PROJECT_DIR$/../test/pom.xml" />
+        <option value="$USER_HOME$/projetos/intrabundle/pom.xml" />
+        <option value="$USER_HOME$/arquillian-experience/conventions-archtype/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
+

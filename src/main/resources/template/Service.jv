@@ -1,0 +1,42 @@
+package ${package};
+
+import ${crudPackage};
+import ${entityPackage};
+
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
+import java.util.List;
+
+
+@Stateless
+public class ${entityClass}Service {
+
+    @Inject
+    protected Crud<${entityClass}> ${entityName}Crud;
+
+    public ${entityClass} store(${entityClass} entity){
+        ${entityName}Crud.saveOrUpdate(entity);
+        return entity;
+    }
+
+    public void remove(${entityClass} entity){
+        ${entityName}Crud.delete(entity);
+    }
+
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public ${entityClass} find(${entityClass} entity){
+        return ${entityName}Crud.example(entity).find();
+    }
+
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<${entityClass}> list(${entityClass} entity){
+        return ${entityName}Crud.example(entity).list();
+    }
+
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Crud crud(){
+       return ${entityName}Crud;
+    }
+}

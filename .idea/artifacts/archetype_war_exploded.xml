@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="archetype:war exploded">
+    <output-path>$USER_HOME$/arquillian-experience/conventions-archtype/target/archetype</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="archetype/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="archetype" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.conventionsframework:conventions-core:1.2.1" />
+          <element id="library" level="project" name="Maven: org.apache.commons:commons-lang3:3.1" />
+          <element id="library" level="project" name="Maven: org.primefaces:primefaces:5.0" />
+          <element id="library" level="project" name="Maven: org.primefaces.themes:all-themes:1.0.10" />
+          <element id="library" level="project" name="Maven: org.apache.myfaces.extensions.cdi.bundles:myfaces-extcdi-bundle-jsf20:1.0.6" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.2.4" />
+          <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.2.1" />
+          <element id="library" level="project" name="Maven: org.jboss.arquillian.extension:arquillian-warp-jsf:1.0.0.Alpha7" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$USER_HOME$/arquillian-experience/conventions-archtype/archetype.iml" filepath="$USER_HOME$/arquillian-experience/conventions-archtype/archetype.iml" />
+      <module fileurl="file://$PROJECT_DIR$/crud-plugin.iml" filepath="$PROJECT_DIR$/crud-plugin.iml" />
+      <module fileurl="file://$USER_HOME$/git/forge-core/javaee-impl/forge-javaee-impl.iml" filepath="$USER_HOME$/git/forge-core/javaee-impl/forge-javaee-impl.iml" />
+      <module fileurl="file://$USER_HOME$/projetos/intrabundle/intrabundle.iml" filepath="$USER_HOME$/projetos/intrabundle/intrabundle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../person-manager/person-manager.iml" filepath="$PROJECT_DIR$/../person-manager/person-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../test/test.iml" filepath="$PROJECT_DIR$/../test/test.iml" />
+    </modules>
+  </component>
+</project>
+

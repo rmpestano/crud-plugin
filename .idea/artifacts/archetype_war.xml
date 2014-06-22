@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="archetype:war">
+    <output-path>$USER_HOME$/arquillian-experience/conventions-archtype/target</output-path>
+    <root id="archive" name="archetype.war">
+      <element id="artifact" artifact-name="archetype:war exploded" />
+    </root>
+  </artifact>
+</component>
