@@ -4,8 +4,8 @@
 using it by executing the following commands in forge console(with linebreaks as below):
 <pre>
 new-project --named crud --topLevelPackage com.forge.crud --type war;
-<br><br>   
     
+      
 persistence setup --provider HIBERNATE --container JBOSS_AS7;
    
 "n";
@@ -22,7 +22,7 @@ crud setup
 crud service-from-entity com.forge.crud.model.Person.java
    
    
-```
+</pre>
 
 you should have the following classes generated:
 
