@@ -14,7 +14,11 @@ persistence setup --provider HIBERNATE --container JBOSS_AS7;
    
    
 entity --named Person;
+
   
+   
+field string --named name;
+   
 
 beans setup;
   
@@ -25,6 +29,15 @@ crud setup;
 crud service-from-entity --entity com.forge.crud.model.Person.java;
    
    
+arquillian setup --containerName JBOSS_AS_MANAGED_7
+  
+  
+  
+"y";
+
+arquillian create-test --class com.forge.crud.service.PersonService.java;
+  
+    
 </pre>
 
 you should have the following classes generated:
