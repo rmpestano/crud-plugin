@@ -19,7 +19,7 @@ entity --named Person
 crud setup
     
    
-crud service-from-entity com.forge.crud.model.Person.java
+crud service-from-entity --entity com.forge.crud.model.Person.java
    
    
 </pre>
