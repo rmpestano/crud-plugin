@@ -13,19 +13,13 @@ persistence setup --provider HIBERNATE --container JBOSS_AS7;
    
    
    
-entity --named Person
-   
-   
-field string --named name
-  
-         
-beans setup
+entity --named Person;
 
-  
-crud setup
+   
+crud setup;
     
    
-crud service-from-entity --entity com.forge.crud.model.Person.java
+crud service-from-entity --entity com.forge.crud.model.Person.java;
    
    
 </pre>
