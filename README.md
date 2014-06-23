@@ -19,6 +19,7 @@ crud setup
  
  
 crud service-from-entity com.forge.crud.model.Person.java
+
  
 ```
 
