@@ -118,7 +118,6 @@ public class PersonServiceTest {
                 .addClass(Person.class)
                 .addClass(Phone.class);
         archive.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
-        archive.addAsWebInfResource("web.xml", "web.xml");
         archive.addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
         System.out.println(archive.toString(true));
         return archive;
