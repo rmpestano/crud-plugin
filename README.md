@@ -4,23 +4,23 @@
 using it by executing the following commands in forge console(with linebreaks as below):
 ```html
 new-project --named crud --topLevelPackage com.forge.crud --type war;
- 
- 
+<br /> 
+<br /> 
 persistence setup --provider HIBERNATE --container JBOSS_AS7;
- 
+<br /> 
 "n";
- 
- 
- 
- 
+<br /> 
+<br /> 
+<br /> 
+<br /> 
 entity --named Person
- 
+<br /> 
 crud setup
- 
- 
+<br /> 
+<br /> 
 crud service-from-entity com.forge.crud.model.Person.java
-
-. 
+<br />
+<br /> 
 ```
 
 you should have the following classes generated:
