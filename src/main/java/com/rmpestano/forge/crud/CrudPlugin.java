@@ -14,7 +14,6 @@ import org.jboss.forge.shell.PromptType;
 import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.ShellPrompt;
 import org.jboss.forge.shell.plugins.*;
-import org.jboss.forge.shell.util.Packages;
 import org.jboss.forge.spec.javaee.EJBFacet;
 
 import javax.enterprise.event.Event;
@@ -58,7 +57,7 @@ public class CrudPlugin implements Plugin {
 
         String javaPackage;
         if (topLevelPackage == null) {
-            javaPackage = "com.forge." + Packages.toValidPackageName("crud");
+            javaPackage = project.getFacet(CrudFacet.class).getCrudPackage();
         } else {
             javaPackage = topLevelPackage;
         }
@@ -73,7 +72,7 @@ public class CrudPlugin implements Plugin {
 
     private void createBaseClasses(String javaPackage) {
         Map<Object, Object> params = new HashMap<Object, Object>();
-        params.put("package", javaPackage);
+        params.put("package",javaPackage);
         String crudOut = processor.processTemplate(params, "template/Crud.jv");
         JavaClass crudClass = JavaParser.parse(JavaClass.class, crudOut);
         try {
@@ -86,7 +85,7 @@ public class CrudPlugin implements Plugin {
 
 
     @Command(value = "service-from-entity", help = "Creates a crud service from entity")
-    public void service( @Option(required = true, type = PromptType.JAVA_CLASS, description = "entity to generate the crud service") JavaResource entity,
+    public void service( @Option(name = "entity", required = true, type = PromptType.JAVA_CLASS, description = "entity to generate the crud service") JavaResource entity,
                          @Option(name = "topLevelPackage",
                                  description = "The top-level java package for the crud service [e.g: \"com.example.project.crud\"] ",
                                  type = PromptType.JAVA_PACKAGE) final String topLevelPackage,
@@ -99,7 +98,7 @@ public class CrudPlugin implements Plugin {
         String javaPackage;
 
         if (topLevelPackage == null) {
-            javaPackage = "com.forge." + Packages.toValidPackageName("service");
+            javaPackage = project.getFacet(CrudFacet.class).getServicePackage();
         } else {
             javaPackage = topLevelPackage;
         }
