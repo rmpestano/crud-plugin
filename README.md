@@ -2,18 +2,19 @@
 -----------------------------------------------------
 
 using it by executing the following commands in forge console(with linebreaks as below):
- 
+<pre>
 new-project --named crud --topLevelPackage com.forge.crud --type war;
-     
+<br><br>   
     
 persistence setup --provider HIBERNATE --container JBOSS_AS7;
-     
+   
 "n";
-&nbsp;      
+   
    
    
    
 entity --named Person
+
    
 crud setup
     
