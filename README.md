@@ -1,25 +1,25 @@
 [JBoss Forge](forge.jboss.org/) crud generator plugin
 -----------------------------------------------------
 
-using it, execute the following commands in forge(with linebreaks as below):
+using it by executing the following commands in forge console(with linebreaks as below):
 ```
 new-project --named crud --topLevelPackage com.forge.crud --type war;
-
-
+&nbsp;
+&nbsp;
 persistence setup --provider HIBERNATE --container JBOSS_AS7;
-
+&nbsp;
 "n";
-
-
-
-
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
 entity --named Person
-
+&nbsp;
 crud setup
-
-
+&nbsp;
+&nbsp;
 crud service-from-entity com.forge.crud.model.Person.java
-
+&nbsp;
 ```
 
 you should have the following classes generated:
@@ -81,3 +81,67 @@ public class PersonService {
 }
 ```
 
+testing the service with Arquillian is simple as below:
+
+```java
+
+import com.forge.service.PersonService;
+import com.manager.model.Person;
+import com.manager.model.Phone;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import javax.inject.Inject;
+
+import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+@RunWith(Arquillian.class)
+public class PersonServiceTest {
+
+    @Inject
+    PersonService personService;
+
+    @Deployment
+    public static WebArchive createDeployment() {
+        WebArchive archive = ShrinkWrap.create(WebArchive.class)
+                .addPackages(true, "com.forge.crud")
+                .addClass(PersonService.class)
+                .addClass(Person.class)
+                .addClass(Phone.class);
+        archive.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        archive.addAsWebInfResource("web.xml", "web.xml");
+        archive.addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
+        System.out.println(archive.toString(true));
+        return archive;
+    }
+
+
+    @Test
+    public void shouldInsertPerson(){
+        Person p = new Person();
+        p.setName("pestano");
+        personService.store(p);
+        assertTrue(p != null);
+        assertTrue(p.getId() != null);
+    }
+
+    @Test
+    public void shouldRemovePerson(){
+        Person p = new Person();
+        p.setName("pestano");
+        Person personToRemove = personService.find(p);
+        assertNotNull(personToRemove);
+        personService.remove(personToRemove);
+        Person removedPerson = personService.find(p);
+        assertNull(removedPerson);
+    }
+
+}
+```
