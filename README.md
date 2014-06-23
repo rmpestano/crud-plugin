@@ -14,7 +14,10 @@ persistence setup --provider HIBERNATE --container JBOSS_AS7;
    
    
 entity --named Person;
+  
 
+beans setup;
+  
    
 crud setup;
     
