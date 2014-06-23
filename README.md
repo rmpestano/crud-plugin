@@ -2,7 +2,7 @@
 -----------------------------------------------------
 
 using it by executing the following commands in forge console(with linebreaks as below):
-```
+```html
 new-project --named crud --topLevelPackage com.forge.crud --type war;
 &nbsp;
 &nbsp;
