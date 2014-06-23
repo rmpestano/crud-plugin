@@ -15,7 +15,9 @@ persistence setup --provider HIBERNATE --container JBOSS_AS7;
    
 entity --named Person
 
-   
+
+field string --named name
+    
 crud setup
     
    
@@ -115,8 +117,7 @@ public class PersonServiceTest {
         WebArchive archive = ShrinkWrap.create(WebArchive.class)
                 .addPackages(true, "com.forge.crud")
                 .addClass(PersonService.class)
-                .addClass(Person.class)
-                .addClass(Phone.class);
+                .addClass(Person.class);
         archive.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         archive.addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml");
         System.out.println(archive.toString(true));
