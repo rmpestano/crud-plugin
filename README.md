@@ -1,4 +1,4 @@
-[JBoss Forge](forge.jboss.org/) crud generator plugin
+A simple [JBoss Forge](forge.jboss.org/) crud generator plugin based on Hibernate API.
 -----------------------------------------------------
 
 using it by executing the following commands in forge console(with linebreaks/whitespaces as below):
@@ -31,7 +31,7 @@ you should have the following classes generated:
 ```
 Wrote /home/rmpestano/workspace/crud/src/main/java/com/forge/crud/Crud.java
 [crud] Person.java $ 
-[crud] Person.java $ crud service-from-entity com.forge.crud.model.Person.java
+[crud] Person.java $ crud service-from-entity --entity com.forge.crud.model.Person.java
  ? An action has requested to install the following facets into your project [interface org.jboss.forge.spec.javaee.EJBFacet] continue? [Y/n] 
 ***SUCCESS*** Installed [forge.spec.ejb] successfully.
 Wrote /home/rmpestano/workspace/crud/pom.xml
@@ -146,3 +146,7 @@ public class PersonServiceTest {
 
 }
 ```
+
+see it in action:
+
+YT("http://youtu.be/UZiQrjRpLW4")
