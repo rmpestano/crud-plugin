@@ -1,7 +1,7 @@
 [JBoss Forge](forge.jboss.org/) crud generator plugin
 -----------------------------------------------------
 
-using it by executing the following commands in forge console(with linebreaks as below):
+using it by executing the following commands in forge console(with linebreaks/whitespaces as below):
 <pre>
 new-project --named crud --topLevelPackage com.forge.crud --type war;
     
