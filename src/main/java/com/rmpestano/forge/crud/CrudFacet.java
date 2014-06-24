@@ -6,14 +6,19 @@ import org.jboss.forge.project.dependencies.DependencyInstaller;
 import org.jboss.forge.project.dependencies.ScopeType;
 import org.jboss.forge.project.facets.BaseFacet;
 import org.jboss.forge.project.facets.DependencyFacet;
-import org.jboss.forge.project.facets.JavaSourceFacet;
 import org.jboss.forge.project.packaging.PackagingType;
+import org.jboss.forge.resources.DirectoryResource;
+import org.jboss.forge.resources.FileResource;
+import org.jboss.forge.resources.Resource;
+import org.jboss.forge.resources.ResourceFilter;
 import org.jboss.forge.shell.plugins.RequiresFacet;
 import org.jboss.forge.shell.plugins.RequiresPackagingType;
 import org.jboss.forge.spec.javaee.CDIFacet;
 import org.jboss.forge.spec.javaee.PersistenceFacet;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RequiresFacet({
@@ -28,6 +33,8 @@ public class CrudFacet extends BaseFacet {
     public static final Dependency CDI_INJECT = DependencyBuilder.create("javax.inject:javax.inject:1");
 
     private final DependencyInstaller installer;
+
+    private Boolean crudCreated;//Crud.java must exist to enable this facet, it is created via setup command
 
 
     @Inject
@@ -55,23 +62,40 @@ public class CrudFacet extends BaseFacet {
             installer.install(project, CDI_INJECT, ScopeType.PROVIDED);
         }
 
-        return true;
+        crudIsCreated(getProject().getProjectRoot());
+        return crudCreated != null && crudCreated;
     }
 
-    public String getCrudPackage() {
-        JavaSourceFacet sourceFacet = project.getFacet(JavaSourceFacet.class);
-        return sourceFacet.getBasePackage() + ".crud";
-    }
 
-    public String getServicePackage() {
-        JavaSourceFacet sourceFacet = project.getFacet(JavaSourceFacet.class);
-        return sourceFacet.getBasePackage() + ".service";
-    }
 
 
     @Override
     public boolean isInstalled() {
-        return install();
+        return crudCreated != null || install();
     }
 
+    public boolean crudIsCreated(DirectoryResource projectRoot) {
+        final List<DirectoryResource> children = new ArrayList<DirectoryResource>();
+        List<Resource<?>> candidates = projectRoot.listResources(new ResourceFilter() {
+            @Override
+            public boolean accept(Resource<?> resource) {
+                if(resource instanceof DirectoryResource){
+                    children.add(resource.reify(DirectoryResource.class));
+                    return false;
+                }
+                return resource instanceof FileResource && resource.getName().equals("Crud.java");
+            }
+        });
+
+        if(candidates != null && !candidates.isEmpty()){
+                crudCreated = Boolean.TRUE;
+        }
+        else{
+            for (DirectoryResource child : children) {
+                crudIsCreated(child);
+            }
+        }
+
+        return Boolean.FALSE;
+    }
 }
