@@ -371,17 +371,17 @@
       <file leaf-file-name="CrudPlugin.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/rmpestano/forge/crud/CrudPlugin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1548" max-vertical-offset="2448">
-              <caret line="114" column="59" selection-start-line="114" selection-start-column="59" selection-end-line="114" selection-end-column="59" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="460" max-vertical-offset="2538">
+              <caret line="56" column="9" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CrudFacet.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="CrudFacet.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/rmpestano/forge/crud/CrudFacet.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="748" max-vertical-offset="1602">
+            <state vertical-scroll-proportion="0.30721003" vertical-offset="748" max-vertical-offset="1674">
               <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
               <folding>
                 <element signature="e#1665#1666#0" expanded="true" />
@@ -391,6 +391,8 @@
                 <element signature="e#2824#2843#0" expanded="true" />
                 <element signature="e#2912#3323#0" expanded="true" />
                 <element signature="e#3312#3313#0" expanded="true" />
+                <element signature="e#3643#3644#0" expanded="true" />
+                <element signature="e#3677#3678#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -406,10 +408,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Crud.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Crud.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../person-manager/src/main/java/com/manager/crud/Crud.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.21943574" vertical-offset="92" max-vertical-offset="6444">
+            <state vertical-scroll-proportion="0.0" vertical-offset="92" max-vertical-offset="6444">
               <caret line="29" column="37" selection-start-line="29" selection-start-column="3" selection-end-line="29" selection-end-column="3" />
               <folding />
             </state>
@@ -533,9 +535,9 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/../person-manager/pom.xml" />
         <option value="$PROJECT_DIR$/../person-manager/src/main/java/com/manager/model/Person.java" />
+        <option value="$PROJECT_DIR$/../person-manager/src/main/java/com/manager/service/PersonService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rmpestano/forge/crud/CrudFacet.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/rmpestano/forge/crud/CrudPlugin.java" />
-        <option value="$PROJECT_DIR$/../person-manager/src/main/java/com/manager/service/PersonService.java" />
       </list>
     </option>
   </component>
@@ -1004,7 +1006,7 @@
       <workItem from="1403444283871" duration="5666000" />
       <workItem from="1403478943270" duration="5216000" />
       <workItem from="1403486767609" duration="665000" />
-      <workItem from="1403563567168" duration="3946000" />
+      <workItem from="1403563567168" duration="5112000" />
     </task>
     <task id="LOCAL-00001" summary="- crud test&#10;- jboss managed profile">
       <created>1403441725187</created>
@@ -1018,7 +1020,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45044000" />
+    <option name="totallyTimeSpent" value="46210000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1121,12 +1123,6 @@
           <line>65</line>
           <properties />
           <option name="timeStamp" value="92" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/rmpestano/forge/crud/CrudFacet.java</url>
-          <line>46</line>
-          <properties />
-          <option name="timeStamp" value="102" />
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="103" />
@@ -1502,30 +1498,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rmpestano/forge/crud/CrudPlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1548" max-vertical-offset="2448">
-          <caret line="114" column="59" selection-start-line="114" selection-start-column="59" selection-end-line="114" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/rmpestano/forge/crud/CrudFacet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="748" max-vertical-offset="1602">
-          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-          <folding>
-            <element signature="e#1665#1666#0" expanded="true" />
-            <element signature="e#1707#1708#0" expanded="true" />
-            <element signature="e#2638#2639#0" expanded="true" />
-            <element signature="e#2693#2694#0" expanded="true" />
-            <element signature="e#2824#2843#0" expanded="true" />
-            <element signature="e#2912#3323#0" expanded="true" />
-            <element signature="e#3312#3313#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../person-manager/src/main/java/com/manager/service/PersonService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="738">
@@ -1536,9 +1508,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../person-manager/src/main/java/com/manager/crud/Crud.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21943574" vertical-offset="92" max-vertical-offset="6444">
+        <state vertical-scroll-proportion="0.0" vertical-offset="92" max-vertical-offset="6444">
           <caret line="29" column="37" selection-start-line="29" selection-start-column="3" selection-end-line="29" selection-end-column="3" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rmpestano/forge/crud/CrudPlugin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="460" max-vertical-offset="2538">
+          <caret line="56" column="9" selection-start-line="56" selection-start-column="9" selection-end-line="56" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/rmpestano/forge/crud/CrudFacet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.30721003" vertical-offset="748" max-vertical-offset="1674">
+          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+          <folding>
+            <element signature="e#1665#1666#0" expanded="true" />
+            <element signature="e#1707#1708#0" expanded="true" />
+            <element signature="e#2638#2639#0" expanded="true" />
+            <element signature="e#2693#2694#0" expanded="true" />
+            <element signature="e#2824#2843#0" expanded="true" />
+            <element signature="e#2912#3323#0" expanded="true" />
+            <element signature="e#3312#3313#0" expanded="true" />
+            <element signature="e#3643#3644#0" expanded="true" />
+            <element signature="e#3677#3678#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

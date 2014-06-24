@@ -98,4 +98,8 @@ public class CrudFacet extends BaseFacet {
 
         return Boolean.FALSE;
     }
+
+    public Boolean getCrudCreated() {
+        return crudCreated;
+    }
 }

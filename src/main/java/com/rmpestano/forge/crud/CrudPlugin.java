@@ -7,6 +7,7 @@ import org.jboss.forge.project.facets.JavaSourceFacet;
 import org.jboss.forge.project.facets.events.InstallFacets;
 import org.jboss.forge.resources.java.JavaResource;
 import org.jboss.forge.shell.PromptType;
+import org.jboss.forge.shell.ShellColor;
 import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.ShellPrompt;
 import org.jboss.forge.shell.plugins.*;
@@ -49,6 +50,11 @@ public class CrudPlugin implements Plugin {
                               description = "The top-level java package for CRUD base classes [e.g: \"com.example.project.crud\"] ",
                               type = PromptType.JAVA_PACKAGE) final String topLevelPackage) {
 
+        CrudFacet crudFacet = project.getFacet(CrudFacet.class);
+        if(crudFacet != null && crudFacet.getCrudCreated() != null && crudFacet.getCrudCreated()){
+            out.println(ShellColor.YELLOW,"Crud is already created, use service-from-entity command");
+            return;
+        }
         String javaPackage;
         if (topLevelPackage == null) {
             javaPackage = getCrudPackage();
