@@ -22,13 +22,16 @@ field string --named name;
 
 beans setup;
   
-   
+
+forge install-plugin crud 
+  
 crud setup;
     
    
 crud service-from-entity --entity com.forge.crud.model.Person.java;
    
-   
+forge install-plugin arquillian 
+  
 arquillian setup --containerName JBOSS_AS_MANAGED_7
   
   

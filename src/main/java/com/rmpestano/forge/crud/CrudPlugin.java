@@ -50,10 +50,12 @@ public class CrudPlugin implements Plugin {
                               description = "The top-level java package for CRUD base classes [e.g: \"com.example.project.crud\"] ",
                               type = PromptType.JAVA_PACKAGE) final String topLevelPackage) {
 
-        CrudFacet crudFacet = project.getFacet(CrudFacet.class);
-        if(crudFacet != null && crudFacet.getCrudCreated() != null && crudFacet.getCrudCreated()){
-            out.println(ShellColor.YELLOW,"Crud is already created, use service-from-entity command");
-            return;
+        if(project.hasFacet(CrudFacet.class)){
+            CrudFacet crudFacet = project.getFacet(CrudFacet.class);
+            if(crudFacet.getCrudCreated() != null && crudFacet.getCrudCreated()){
+                out.println(ShellColor.YELLOW,"Crud is already created, use service-from-entity command");
+                return;
+            }
         }
         String javaPackage;
         if (topLevelPackage == null) {
