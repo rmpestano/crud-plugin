@@ -3,6 +3,7 @@ package com.rmpestano.forge.crud;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.project.facets.JavaSourceFacet;
+import org.jboss.forge.project.packaging.PackagingType;
 import org.jboss.forge.shell.util.ConstraintInspector;
 import org.jboss.forge.shell.util.Packages;
 import org.jboss.forge.spec.javaee.PersistenceFacet;
@@ -25,7 +26,7 @@ public class CrudPluginTest extends AbstractShellTest {
     @Override
     public void beforeTest() throws Exception {
         super.beforeTest();
-        initializeJavaProject();
+        initializeProject(PackagingType.WAR);
         queueInputLines("", "", "");
         getShell().execute("persistence setup --provider HIBERNATE --container JBOSS_AS7");
         String entityName = "Person";
@@ -37,7 +38,7 @@ public class CrudPluginTest extends AbstractShellTest {
         assertNotNull(javaClass);
         queueInputLines("n", "");
         getShell().execute("beans setup");
-        queueInputLines("");
+        queueInputLines("y");
         getShell().execute("crud setup");
     }
 
@@ -45,7 +46,8 @@ public class CrudPluginTest extends AbstractShellTest {
     public void crudTest() throws Exception {
         assertNotNull(getProject());
         assertTrue(getProject().hasFacet(CrudFacet.class));
-        String pkg = getProject().getFacet(CrudFacet.class).getCrudPackage() + ".Crud";
+        JavaSourceFacet sourceFacet = getProject().getFacet(JavaSourceFacet.class);
+        String pkg = sourceFacet.getBasePackage() + ".crud" + ".Crud";
         String path = Packages.toFileSyntax(pkg) + ".java";
         JavaClass crudClass = (JavaClass) getProject().getFacet(JavaSourceFacet.class).getJavaResource(path).getJavaSource();
         assertNotNull(crudClass);
@@ -61,7 +63,8 @@ public class CrudPluginTest extends AbstractShellTest {
         JavaClass javaClass = (JavaClass) getProject().getFacet(JavaSourceFacet.class).getJavaResource(path).getJavaSource();
         assertNotNull(javaClass);
         getShell().execute("crud service-from-entity --entity "+pkg);
-        String servicePackage = getProject().getFacet(CrudFacet.class).getServicePackage() + ".PersonService";
+        JavaSourceFacet sourceFacet = getProject().getFacet(JavaSourceFacet.class);
+        String servicePackage = sourceFacet.getBasePackage() + ".service" + ".PersonService";
         String servicePath = Packages.toFileSyntax(servicePackage) + ".java";
         JavaClass serviceClass = (JavaClass) getProject().getFacet(JavaSourceFacet.class).getJavaResource(servicePath).getJavaSource();
         assertNotNull(serviceClass);
