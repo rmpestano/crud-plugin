@@ -48,8 +48,7 @@ public final class Crud<T extends Serializable> implements Serializable {
             try {
                 persistentClass = (Class<T>) typeArgs[0];
             } catch (ClassCastException e) {
-                // intentional, will receive classcast in BaseServiceImpl(CDI
-                // BUG)
+                Logger.getLogger(getClass().getName()).warning("could not find persistent class for "+ip.getType().getClass().getName());
             }
         } else {
             throw new IllegalArgumentException(
