@@ -308,10 +308,7 @@ public final class Crud<T extends Serializable> implements Serializable {
 
 
     public T find() {
-        if (criteria == null) {
-            criteria = getCriteria();
-        }
-        T result = (T) criteria.uniqueResult();
+        T result = (T) getCriteria().uniqueResult();
         resetCriteria();
         return result;
     }
@@ -319,30 +316,24 @@ public final class Crud<T extends Serializable> implements Serializable {
     // list
 
     public List<T> list() {
-        if (criteria == null) {
-            criteria = getCriteria();
-        }
-        List<T> result = criteria.list();
+        List<T> result = getCriteria().list();
         resetCriteria();
         return result;
     }
 
     public List<T> listAll() {
         resetCriteria();
-        List<T> result = criteria.list();
+        List<T> result = getCriteria().list();
         return result;
     }
 
     // count
 
     public int count() {
-        if (criteria == null) {
-            criteria = getSession().createCriteria(getPersistentClass());
-        }
-        criteria.setProjection(Projections.count(getSession()
+        getCriteria().setProjection(Projections.count(getSession()
                 .getSessionFactory().getClassMetadata(persistentClass)
                 .getIdentifierPropertyName()));
-        Long result = (Long) criteria.uniqueResult();
+        Long result = (Long) getCriteria().uniqueResult();
         resetCriteria();
         return result.intValue();
     }
@@ -423,6 +414,14 @@ public final class Crud<T extends Serializable> implements Serializable {
             criteria = getSession().createCriteria(getPersistentClass());
         }
         return criteria;
+    }
+
+    public Criteria getCriteria(boolean reset) {
+         Criteria copy = getCriteria();
+         if(reset){
+             criteria = null;
+          }
+          return copy;
     }
 
     private <PK extends Serializable> PK getPK(T entity) {
