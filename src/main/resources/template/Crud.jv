@@ -2,10 +2,8 @@ package ${package};
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Example;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.*;
+import org.hibernate.sql.JoinType;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -21,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Calendar;
+
 
 /**
  * Generic injectable crud based on hibernate api
@@ -37,18 +37,6 @@ public final class Crud<T extends Serializable> implements Serializable {
     private Session session;
 
     private Class<T> persistentClass;
-
-    private MatchMode matchMode;
-
-    private Example example;
-
-    private Integer maxResult;
-
-    private Integer firstResult;
-
-    private List<String> excludeProperties;
-
-    private Projection projection;
 
     private Criteria criteria;
 
@@ -71,25 +59,68 @@ public final class Crud<T extends Serializable> implements Serializable {
 
     // buider methods
 
-    public Crud<T> matchMode(MatchMode matchMode) {
-        this.matchMode = matchMode;
+
+    public Crud<T> example(T entity) {
+        if (entity != null) {
+            getCriteria().add(Example.create(entity));
+        } else {
+            Logger.getLogger(getClass().getName()).warning("cannot create example for a null entity.");
+            return this;
+        }
         return this;
     }
 
-    public Crud<T> example(T entity) {
-         if(entity != null){
-             this.example = Example.create(entity);
-          }
+    public Crud<T> example(T entity, List<String> excludeProperties) {
+        Example example = null;
+        if (entity != null) {
+            example = Example.create(entity);
+        } else {
+            Logger.getLogger(getClass().getName()).warning("cannot create example for a null entity.");
+            return this;
+        }
+        if (excludeProperties != null && !excludeProperties.isEmpty()) {
+            for (String exclude : excludeProperties) {
+                example.excludeProperty(exclude);
+            }
+        }
+        getCriteria().add(example);
+        return this;
+    }
+
+    public Crud<T> example(T entity, MatchMode mode) {
+        if (entity != null) {
+            getCriteria().add(Example.create(entity).enableLike(mode));
+        } else {
+            Logger.getLogger(getClass().getName()).warning("cannot create example for a null entity.");
+            return this;
+        }
+        return this;
+    }
+
+    public Crud<T> example(T entity, MatchMode mode, List<String> excludeProperties) {
+        Example example = null;
+        if (entity != null) {
+            example = Example.create(entity).enableLike(mode);
+        } else {
+            Logger.getLogger(getClass().getName()).warning("cannot create example for a null entity.");
+            return this;
+        }
+        if (excludeProperties != null && !excludeProperties.isEmpty()) {
+            for (String exclude : excludeProperties) {
+                example.excludeProperty(exclude);
+            }
+        }
+        getCriteria().add(example);
         return this;
     }
 
     public Crud<T> maxResult(Integer maxResult) {
-        this.maxResult = maxResult;
+        getCriteria().setMaxResults(maxResult);
         return this;
     }
 
     public Crud<T> firstResult(Integer firstResult) {
-        this.firstResult = firstResult;
+        getCriteria().setFirstResult(firstResult);
         return this;
     }
 
@@ -104,85 +135,192 @@ public final class Crud<T extends Serializable> implements Serializable {
     }
 
     public Crud<T> projection(Projection projection) {
-        this.projection = projection;
+        getCriteria().setProjection(projection);
         return this;
     }
 
-    public Crud<T> excludeProperties(List<String> properties) {
-        this.excludeProperties = properties;
-        return this;
-    }
+    //nullsafe restrictions
 
-    public Crud<T> excludeProperty(String property) {
-        if (this.excludeProperties == null) {
-            excludeProperties = new ArrayList<String>();
-        }
-
-        if (!excludeProperties.contains(property)) {
-            excludeProperties.add(property);
+    public Crud eq(String property, Object value) {
+        if (value != null) {
+            getCriteria().add(Restrictions.eq(property, value));
         }
         return this;
     }
 
-    // find methods
+    public Crud ne(String property, Object value) {
+        if (value != null) {
+            getCriteria().add(Restrictions.ne(property, value));
+        }
+        return this;
+    }
 
-    /**
-     * find entity
-     *
-     * @return
-     */
+    public Crud not(Criterion criterion) {
+        if (criterion != null) {
+            getCriteria().add(Restrictions.not(criterion));
+        }
+        return this;
+    }
+
+    public Crud ilike(String property, String value, MatchMode matchMode) {
+        if (value != null) {
+            getCriteria().add(Restrictions.ilike(property, value.toString(), matchMode));
+        }
+        return this;
+    }
+
+    public Crud ilike(String property, Object value) {
+        if (value != null) {
+            getCriteria().add(Restrictions.ilike(property, value));
+        }
+        return this;
+    }
+
+    public Crud like(String property, Object value) {
+        if (value != null) {
+            getCriteria().add(Restrictions.like(property, value));
+        }
+        return this;
+    }
+
+    public Crud like(String property, String value, MatchMode matchMode) {
+        if (value != null) {
+            getCriteria().add(Restrictions.like(property, value, matchMode));
+        }
+        return this;
+    }
+
+    public Crud ge(String property, Object value) {
+        if (value != null) {
+            getCriteria().add(Restrictions.ge(property, value));
+        }
+        return this;
+    }
+
+    public Crud le(String property, Object value) {
+        if (value != null) {
+            getCriteria().add(Restrictions.le(property, value));
+        }
+        return this;
+    }
+
+    public Crud between(String property, Calendar dtIni, Calendar dtEnd) {
+        if (dtIni != null && dtEnd != null) {
+            dtIni.set(Calendar.HOUR, 0);
+            dtIni.set(Calendar.MINUTE, 0);
+            dtIni.set(Calendar.SECOND, 0);
+            dtEnd.set(Calendar.HOUR, 23);
+            dtEnd.set(Calendar.MINUTE, 59);
+            dtEnd.set(Calendar.SECOND, 59);
+            getCriteria().add(Restrictions.between(property, dtIni, dtEnd));
+        }
+        return this;
+    }
+
+    public Crud between(String property, Integer ini, Integer end) {
+        if (ini != null && end != null) {
+            getCriteria().add(Restrictions.between(property, ini, end));
+        }
+        return this;
+    }
+
+    public Crud in(String property, List<?> list) {
+        if (list != null && !list.isEmpty()) {
+            getCriteria().add(Restrictions.in(property, list));
+        }
+        return this;
+    }
+
+    public Crud or(Criterion... criterions) {
+        if (criterions != null) {
+            getCriteria().add(Restrictions.or(criterions));
+        }
+        return this;
+    }
+
+    public Crud or(Criterion lhs, Criterion rhs) {
+        if (lhs != null && rhs != null) {
+            getCriteria().add(Restrictions.or(lhs, rhs));
+        }
+        return this;
+    }
+
+    public Crud and(Criterion... criterios) {
+        if (criterios != null) {
+            getCriteria().add(Restrictions.and(criterios));
+        }
+        return this;
+    }
+
+    public Crud and(Criterion lhs, Criterion rhs) {
+        if (lhs != null && rhs != null) {
+            getCriteria().add(Restrictions.and(lhs, rhs));
+        }
+        return this;
+    }
+
+    public Crud join(String property, String alias) {
+        getCriteria().createAlias(property, alias);
+        return this;
+    }
+
+    public Crud join(String property, String alias, JoinType type) {
+        getCriteria().createAlias(property, alias, type);
+        return this;
+    }
+
+    public Crud addCriterion(Criterion criterion) {
+        if (criterion != null) {
+            getCriteria().add(criterion);
+        }
+        return this;
+    }
+
+    public Crud isNull(String property) {
+        if (property != null) {
+            getCriteria().add(Restrictions.isNull(property));
+        }
+        return this;
+    }
+
+    public Crud isNotNull(String property) {
+        if (property != null) {
+            getCriteria().add(Restrictions.isNotNull(property));
+        }
+        return this;
+    }
+
+    public Crud isEmpty(String property) {
+        if (property != null) {
+            getCriteria().add(Restrictions.isEmpty(property));
+        }
+        return this;
+    }
+
+    public Crud isNotEmpty(String property) {
+        if (property != null) {
+            getCriteria().add(Restrictions.isNotEmpty(property));
+        }
+        return this;
+    }
+
+    // find
+
+
     public T find() {
         if (criteria == null) {
-            criteria = getSession().createCriteria(getPersistentClass());
-        }
-        if (example != null && excludeProperties != null
-                && !excludeProperties.isEmpty()) {
-            for (String exclude : excludeProperties) {
-                example.excludeProperty(exclude);
-            }
-        }
-        if (matchMode == null) {
-            matchMode = MatchMode.ANYWHERE;
-        }
-
-        if (projection != null) {
-            criteria.setProjection(projection);
-        }
-        if (example != null) {
-            criteria.add(example.enableLike(matchMode).ignoreCase());
+            criteria = getCriteria();
         }
         T result = (T) criteria.uniqueResult();
         resetCriteria();
         return result;
     }
 
-    // list methods
+    // list
 
     public List<T> list() {
         if (criteria == null) {
-            criteria = getSession().createCriteria(getPersistentClass());
-        }
-        if (example != null && excludeProperties != null && !excludeProperties.isEmpty()) {
-            for (String exclude : excludeProperties) {
-                example.excludeProperty(exclude);
-            }
-        }
-        if (matchMode == null) {
-            matchMode = MatchMode.ANYWHERE;
-        }
-
-        if (firstResult != null) {
-            criteria.setFirstResult(firstResult);
-        }
-
-        if (maxResult != null) {
-            criteria.setMaxResults(maxResult);
-        }
-        if (projection != null) {
-            criteria.setProjection(projection);
-        }
-        if (example != null) {
-            criteria.add(example.enableLike(matchMode).ignoreCase());
+            criteria = getCriteria();
         }
         List<T> result = criteria.list();
         resetCriteria();
@@ -190,29 +328,16 @@ public final class Crud<T extends Serializable> implements Serializable {
     }
 
     public List<T> listAll() {
-        return getCriteria().list();
+        resetCriteria();
+        List<T> result = criteria.list();
+        return result;
     }
 
-    // count methods
+    // count
 
     public int count() {
         if (criteria == null) {
             criteria = getSession().createCriteria(getPersistentClass());
-        }
-        if (excludeProperties != null && !excludeProperties.isEmpty()) {
-            for (String exclude : excludeProperties) {
-                example.excludeProperty(exclude);
-            }
-        }
-        if (matchMode == null) {
-            matchMode = MatchMode.ANYWHERE;
-        }
-
-        if (projection != null) {
-            criteria.setProjection(projection);
-        }
-        if (example != null) {
-            criteria.add(example.enableLike(matchMode).ignoreCase());
         }
         criteria.setProjection(Projections.count(getSession()
                 .getSessionFactory().getClassMetadata(persistentClass)
@@ -223,8 +348,10 @@ public final class Crud<T extends Serializable> implements Serializable {
     }
 
     public int countAll() {
-        return projection(Projections.rowCount()).criteria(
-                getCriteria().setFirstResult(0).setMaxResults(1)).count();
+        int result = projection(Projections.rowCount()).firstResult(0)
+                .maxResult(1).count();
+        resetCriteria();
+        return result;
     }
 
     // hibernate session shortcuts
@@ -264,11 +391,6 @@ public final class Crud<T extends Serializable> implements Serializable {
 
     private void resetCriteria() {
         criteria = null;
-        matchMode = null;
-        maxResult = null;
-        example = null;
-        firstResult = null;
-        projection = null;
     }
 
     // Getters & Setters

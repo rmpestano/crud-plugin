@@ -15,6 +15,7 @@ import org.jboss.forge.spec.javaee.EJBFacet;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ import java.util.Map;
  */
 @Alias("crud")
 @RequiresFacet(CrudFacet.class)
+@Singleton
 public class CrudPlugin implements Plugin {
 
     @Inject
