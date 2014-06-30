@@ -102,6 +102,22 @@ public class PersonService {
 }
 ```
 
+Crud is based on fluent api(builder patter) so for example imagine you want to list Persons
+which contains a name and some of the given phone numbers:
+```java
+ public List<Person> findByNameAndPhones(String name, List<Phone> phones) {
+         //if crud criteria is null it will create one on demand(use crud.resetCruteria to guarantee it is clean)
+         crud.resetCriteria();    
+         return crud.ilike("name", name, MatchMode.ANYWHERE).//nullsafe (will add ilike only if name is not null)
+                 .join("phone", "phone").//a person can have one or more telephones 
+                 .in("phone.numbers", phones)     
+                 .and(Restrictions.eq("aProperty","aValue"))//can use conjunstions and disjunctions(all nullsafe)
+                 .addCriterion(Restrictions.or(Restrictions.eq("aProperty","aValue")))//can add criterion(also nullsafe 
+                 .isNotEmpty("name")
+                 .list();//criteria is cleared after its execution
+     }
+```  
+
 testing the service with Arquillian is simple as below:
 
 ```java
@@ -165,6 +181,7 @@ public class PersonServiceTest {
 }
 ```
 
+   
 see it in action:
 
 [![ScreenShot](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](http://youtu.be/UZiQrjRpLW4)
