@@ -106,7 +106,7 @@ Crud is based on fluent api(builder patter) so for example imagine you want to l
 which contains a name and some of the given phone numbers:
 ```java
 
- public class AService(){
+ public class AService{
     @Inject
     Crud<Person> crud;
  
