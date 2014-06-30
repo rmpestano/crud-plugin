@@ -40,6 +40,10 @@ public final class Crud<T extends Serializable> implements Serializable {
 
     private Criteria criteria;
 
+
+    /**
+     * init persistentClass based on injection point
+     */
     @Inject
     public void init(InjectionPoint ip) {
         if (ip != null && ip.getType() != null) {
@@ -56,8 +60,7 @@ public final class Crud<T extends Serializable> implements Serializable {
         }
     }
 
-    // buider methods
-
+    // example
 
     public Crud<T> example(T entity) {
         if (entity != null) {
@@ -303,46 +306,70 @@ public final class Crud<T extends Serializable> implements Serializable {
         return this;
     }
 
-    // find
+   //retrieve methods
 
+   // find
 
-    public T find() {
-        T result = (T) getCriteria().uniqueResult();
-        resetCriteria();
-        return result;
-    }
+  /**
+   *
+   * @return an unique entry from table represented by {@link ${package}.Crud#persistentClass}
+   * based on current ${package}Crud#criteria and its restrictions
+   * @throws javax.persistence.NonUniqueResultException in case current {@link ${package}.Crud#criteria} doesn't match an unique entry
+   */
+   public T find(){
+      T result = (T) getCriteria().uniqueResult();
+      resetCriteria();
+      return result;
+   }
 
-    // list
+   // list
+  /**
+   *
+   * @return all entries from the table represented by {@link ${package}.Crud#persistentClass}
+   * based on current {@link ${package}.Crud#criteria} and its restrictions
+   */
+   public List<T> list(){
+      List<T> result = getCriteria().list();
+      resetCriteria();
+      return result;
+   }
 
-    public List<T> list() {
-        List<T> result = getCriteria().list();
-        resetCriteria();
-        return result;
-    }
+  /**
+   *
+   * @return all entries from table represented by {@link ${package}.Crud#persistentClass}
+   */
+   public List<T> listAll(){
+      resetCriteria();
+      List<T> result = this.list();
+      return result;
+   }
 
-    public List<T> listAll() {
-        resetCriteria();
-        List<T> result = getCriteria().list();
-        return result;
-    }
+   // count
 
-    // count
+  /**
+   *
+   * @return number of entries from table represented by {@link ${package}.Crud#persistentClass}
+   * based on current @link{ ${package}.Crud#criteria} and its restrictions
+   */
+   public int count(){
+         getCriteria().setProjection(Projections.count(getSession()
+               .getSessionFactory().getClassMetadata(persistentClass)
+               .getIdentifierPropertyName()));
+         Long result = (Long) getCriteria().uniqueResult();
+         resetCriteria();
+         return result.intValue();
+   }
 
-    public int count() {
-        getCriteria().setProjection(Projections.count(getSession()
-                .getSessionFactory().getClassMetadata(persistentClass)
-                .getIdentifierPropertyName()));
-        Long result = (Long) getCriteria().uniqueResult();
-        resetCriteria();
-        return result.intValue();
-    }
-
-    public int countAll() {
-        int result = projection(Projections.rowCount()).firstResult(0)
-                .maxResult(1).count();
-        resetCriteria();
-        return result;
-    }
+   /**
+    *
+    * @return number of entries from table represented by {@link ${package}.Crud#persistentClass}
+    */
+   public int countAll(){
+         resetCriteria();
+         int result = this.count();
+         resetCriteria();
+         return result;
+   }
 
     // hibernate session shortcuts
 

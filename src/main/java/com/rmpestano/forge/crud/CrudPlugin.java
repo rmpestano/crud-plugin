@@ -133,8 +133,6 @@ public class CrudPlugin implements Plugin {
 
     }
 
-
-
     private void installCrud() {
         if (!project.hasFacet(CrudFacet.class)) {
             request.fire(new InstallFacets(CrudFacet.class));
