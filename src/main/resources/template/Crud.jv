@@ -40,7 +40,7 @@ public final class Crud<T extends Serializable> implements Serializable {
 
     private Criteria criteria;
     
-    private Logger log;
+    private Logger log = Logger.getLogger(getClass().getName());;
 
 
     /**
@@ -53,7 +53,6 @@ public final class Crud<T extends Serializable> implements Serializable {
             Type[] typeArgs = type.getActualTypeArguments();
             try {
                 persistentClass = (Class<T>) typeArgs[0];
-                log = Logger.getLogger(getClass().getName());
             } catch (ClassCastException e) {
                 log.warning("could not find persistent class for "+ip.getType().getClass().getName());
             }
