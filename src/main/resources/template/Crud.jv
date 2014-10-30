@@ -40,7 +40,7 @@ public final class Crud<T extends Serializable> implements Serializable {
 
     private Criteria criteria;
     
-    private Logger log = Logger.getLogger(getClass().getName());;
+    private Logger log = Logger.getLogger(getClass().getName());
 
 
     /**
